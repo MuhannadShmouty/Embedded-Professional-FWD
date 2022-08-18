@@ -38,7 +38,7 @@ EN_transState_t recieveTransactionData(ST_transaction_t *transData, ST_accountsD
     }
     else {
         printError("Declined\nStolen card");
-        transData->user_id = -1;
+        transData->user_id = ERROR_NUM;
         return DECLINED_STOLEN_CARD;
     }
 }
@@ -63,7 +63,7 @@ EN_serverError_t isValidAccount(ST_transaction_t *transData, ST_accountsDB_t acc
 int32_t getTransactionSequenceNumber() {
     FILE *transFilePtr = fopen("../Server/transactionsDB.csv", "r");
     // Skip first line
-    fseek(transFilePtr, 94, SEEK_SET);
+    fseek(transFilePtr, SIZE_OF_TITLE_LINE, SEEK_SET);
     
     if (fgetc(transFilePtr) == EOF) {
         // file is empty
@@ -74,17 +74,19 @@ int32_t getTransactionSequenceNumber() {
     fseek(transFilePtr, -1, SEEK_CUR);
 
     int32_t lastID;
-    int8_t rest[100];
+    int8_t rest[SIZE_OF_BUFFER];
 
     int32_t index = 0;
-    int8_t buffer[100];
+    int8_t buffer[SIZE_OF_BUFFER];
     
-    while (fgets(buffer, 100, transFilePtr) != NULL) {
+    while (fgets(buffer, SIZE_OF_BUFFER, transFilePtr) != NULL) {
+        // Repeat until end of file is reached
         sscanf(buffer, "%d,%s", &lastID, rest);
         index++;
         // clear buffer
-        memset(buffer, 0, 100);
+        memset(buffer, 0, SIZE_OF_BUFFER);
     }
+    // Close file
     fclose(transFilePtr);
     return lastID + 1;
 }
@@ -93,10 +95,11 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
     
     FILE *transFilePtr;
     transFilePtr = fopen("../Server/transactionsDB.csv", "a");
+    // Seek to a new line
     fseek(transFilePtr, 2, SEEK_CUR);
 
     // Writing transactionsDB.csv file
-    int8_t state[50];
+    int8_t state[SIZE_OF_STATE];
     switch (transData->transState) {
         case APPROVED:
             strcpy(state, "APPROVED");
@@ -133,7 +136,7 @@ EN_serverError_t loadData(ST_accountsDB_t accountDB[]) {
     FILE *accountsDbPtr = fopen("../Server/accountsDB.csv", "r");
 
     int32_t index = 0;
-    int8_t buffer[100];
+    int8_t buffer[SIZE_OF_BUFFER];
 
     // To skip first line
     while (fgetc(accountsDbPtr) != '\n');
@@ -142,8 +145,9 @@ EN_serverError_t loadData(ST_accountsDB_t accountDB[]) {
         sscanf(buffer, "%hd, %[^,], %[^,], %[^,], %f, %hhd", &(accountDB[index].id), accountDB[index].CardHolderName,
         accountDB[index].PAN, accountDB[index].CardExpirationDate, &(accountDB[index].Balance), &(accountDB[index].isStolen));
         index++;
+
         // clear buffer
-        memset(buffer, 0, 100);
+        memset(buffer, 0, SIZE_OF_BUFFER);
     }
     fclose(accountsDbPtr);
 }
@@ -155,10 +159,8 @@ EN_serverError_t saveAccountData(ST_accountsDB_t accountDB[]) {
     accFilePtr = fopen("../Server/accountsDB.csv", "w");
     
     // To skip first line
-    int8_t buffer[100];
+    int8_t buffer[SIZE_OF_BUFFER];
 
-    // printf("%d, %s, %s, %s, %f\n", accountDB[22].id, accountDB[22].CardHolderName,
-    //             accountDB[22].PAN, accountDB[22].CardExpirationDate, accountDB[22].Balance);
     fprintf(accFilePtr, "id, Card Holder Name, PAN, Card Expiration Date, Balance, isStolen\n");
 
     for (int i = 0; i < ACC_DB_MAX_SIZE; i++) {
@@ -177,24 +179,26 @@ EN_serverError_t getTransaction(uint32_t transactionSequenceNumber, ST_transacti
     FILE *transFilePtr = fopen("../Server/transactionsDB.csv", "r");
 
     // Skip first line
-    fseek(transFilePtr, 94, SEEK_SET);
+    fseek(transFilePtr, SIZE_OF_TITLE_LINE, SEEK_SET);
     
     if (fgetc(transFilePtr) == EOF) {
         // file is empty
         fclose(transFilePtr);
         return TRANSACTION_NOT_FOUND;
     }
-    
-    int8_t buffer[100];
-    int8_t rest[100];
-    uint32_t currentSequenceNumber;
+    // Seek back 1 character
     fseek(transFilePtr, -1, SEEK_CUR);
 
-    while (fgets(buffer, 100, transFilePtr) != NULL) {
+    int8_t buffer[SIZE_OF_BUFFER];
+    int8_t rest[SIZE_OF_BUFFER];
+    uint32_t currentSequenceNumber;
+
+    
+
+    while (fgets(buffer, SIZE_OF_BUFFER, transFilePtr) != NULL) {
         sscanf(buffer, "%d, %s", &currentSequenceNumber, rest);
 
         if (currentSequenceNumber == transactionSequenceNumber) {
-            // printf("Transaction:\n%s\n", buffer);
             sscanf(buffer, "%u, %d, %f, %[^,], %d", &transData->transactionSequenceNumber,
                     &transData->user_id, &transData->terminalData.transAmount,
                     transData->terminalData.transactionDate, (int *)&transData->transState);

@@ -20,12 +20,15 @@ void appStart(void) {
     // Set max transaction amount to default value
     transData.terminalData.maxTransAmount = DEFAULT_MAX_TRANSACTION;
     // Check if max transaction value is needed to be changed
-    printf("Set maximum transaction Amount? [Default 5000](y/n):");
     char response;
+    do {
+        printf("Set maximum transaction Amount? [Default 5000](y/n):");
+        scanf(" %c", &response);
+        if (!(response == 'y' || response == 'Y' || response == 'N' || response == 'n')) {
+            printError("Invalid Input\nExpected Input:[Y,y,N,n]");
+        }
+    } while(!(response == 'y' || response == 'Y' || response == 'N' || response == 'n'));
 
-    scanf(" %c", &response);
-
-    //while(response != 'Y' && response != 'y' && response != 'n' && response != 'N');
     if (response == 'y' || response == 'Y'){
         while(setMaxAmount(&(transData.terminalData)) != OK);
     }

@@ -31,7 +31,10 @@ EN_terminalError_t isCardExpired(ST_cardData_t cardData) {
     struct tm tm = *localtime(&t);
 
     // uint8_t dd = tm.tm_mday;
+    // Adding 1 as the month is counted [0 - 11]
     int8_t currentMonth = tm.tm_mon+1;
+
+    // Adding 1900 as the function returns the number of years since 1900
     int32_t currentYear = tm.tm_year+1900;
     
     int32_t cardExpYear;

@@ -87,8 +87,6 @@ EN_cardError_t getCardExpiryDate(ST_cardData_t *cardData) {
         (sscanf(buffer, "%d/%d", &mm, &yy) == 2) &&
         (strlen (buffer) == EXPIRY_DATE_SIZE) &&
         mm <= MAX_VALID_MONTH && mm > 0){
-        
-        // TODO : is it neccesary to check if the card actually expired?
 
         // Date format is Valid [MM/YY]
         // Month is between 1 - 12

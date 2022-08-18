@@ -5,6 +5,9 @@
 #define SIZE_OF_BUFFER 100
 #define ACC_DB_MAX_SIZE 255
 #define TRANS_DB_MAX_SIZE 255
+#define SIZE_OF_STATE 50
+#define ERROR_NUM -1
+#define SIZE_OF_TITLE_LINE 94
 
 typedef enum EN_transState_t
 {
