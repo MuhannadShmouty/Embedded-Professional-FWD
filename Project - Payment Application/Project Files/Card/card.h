@@ -36,8 +36,8 @@ typedef struct ST_cardData_t
 EN_cardError_t getCardHolderName(ST_cardData_t *cardData);
 EN_cardError_t getCardExpiryDate(ST_cardData_t *cardData);
 EN_cardError_t getCardPAN(ST_cardData_t *cardData);
-void printError(char *errorMessage);
-void printSuccess(char *Message);
+void printError(int8_t *errorMessage);
+void printSuccess(int8_t *Message);
 
 bool isNumber(uint8_t *string);
 bool isCorrectCardNumber(uint8_t *string);

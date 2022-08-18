@@ -47,7 +47,7 @@ EN_serverError_t isValidAccount(ST_transaction_t *transData, ST_accountsDB_t acc
     // check if account exists
     // printf("db: %s\nentry: %s\n", accountDB[24].PAN, transData->cardHolderData.primaryAccountNumber);
 
-    for (int i = 0; i < ACC_DB_MAX_SIZE ; i++) {
+    for (int8_t i = 0; i < ACC_DB_MAX_SIZE ; i++) {
         if (((strcmp(accountDB[i].PAN, transData->cardHolderData.primaryAccountNumber) == 0)) &&
             ((strcmp(accountDB[i].CardHolderName, transData->cardHolderData.cardHolderName)) == 0) &&
             ((strcmp(accountDB[i].CardExpirationDate, transData->cardHolderData.cardExpirationDate)) == 0)) {
@@ -74,10 +74,10 @@ int32_t getTransactionSequenceNumber() {
     fseek(transFilePtr, -1, SEEK_CUR);
 
     int32_t lastID;
-    char rest[100];
+    int8_t rest[100];
 
-    int index = 0;
-    char buffer[100];
+    int32_t index = 0;
+    int8_t buffer[100];
     
     while (fgets(buffer, 100, transFilePtr) != NULL) {
         sscanf(buffer, "%d,%s", &lastID, rest);
@@ -96,7 +96,7 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
     fseek(transFilePtr, 2, SEEK_CUR);
 
     // Writing transactionsDB.csv file
-    char state[50];
+    int8_t state[50];
     switch (transData->transState) {
         case APPROVED:
             strcpy(state, "APPROVED");
@@ -132,8 +132,8 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
 EN_serverError_t loadData(ST_accountsDB_t accountDB[]) {
     FILE *accountsDbPtr = fopen("../Server/accountsDB.csv", "r");
 
-    int index = 0;
-    char buffer[100];
+    int32_t index = 0;
+    int8_t buffer[100];
 
     // To skip first line
     while (fgetc(accountsDbPtr) != '\n');
@@ -155,11 +155,11 @@ EN_serverError_t saveAccountData(ST_accountsDB_t accountDB[]) {
     accFilePtr = fopen("../Server/accountsDB.csv", "w");
     
     // To skip first line
-    char buffer[100];
+    int8_t buffer[100];
 
     // printf("%d, %s, %s, %s, %f\n", accountDB[22].id, accountDB[22].CardHolderName,
     //             accountDB[22].PAN, accountDB[22].CardExpirationDate, accountDB[22].Balance);
-    fprintf(accFilePtr, "id, Card Holder Name, PAN, Card Expiration Date, Balance\n");
+    fprintf(accFilePtr, "id, Card Holder Name, PAN, Card Expiration Date, Balance, isStolen\n");
 
     for (int i = 0; i < ACC_DB_MAX_SIZE; i++) {
         if (accountDB[i].CardHolderName[0] == 0)
@@ -185,8 +185,8 @@ EN_serverError_t getTransaction(uint32_t transactionSequenceNumber, ST_transacti
         return TRANSACTION_NOT_FOUND;
     }
     
-    char buffer[100];
-    char rest[100];
+    int8_t buffer[100];
+    int8_t rest[100];
     uint32_t currentSequenceNumber;
     fseek(transFilePtr, -1, SEEK_CUR);
 

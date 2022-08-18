@@ -31,14 +31,14 @@ EN_terminalError_t isCardExpired(ST_cardData_t cardData) {
     struct tm tm = *localtime(&t);
 
     // uint8_t dd = tm.tm_mday;
-    int currentMonth = tm.tm_mon+1;
-    long currentYear = tm.tm_year+1900;
+    int8_t currentMonth = tm.tm_mon+1;
+    int32_t currentYear = tm.tm_year+1900;
     
-    long cardExpYear;
-    int cardExpMonth;
+    int32_t cardExpYear;
+    int8_t cardExpMonth;
 
     // Extract the date from the strings
-    sscanf(cardData.cardExpirationDate, "%02d/%02ld", &cardExpMonth, &cardExpYear);
+    sscanf(cardData.cardExpirationDate, "%02hhd/%02d", &cardExpMonth, &cardExpYear);
 
     // Adding 2000 as the expected year is 2 digit only
     cardExpYear += THE_YEAR_TWO_THOUSAND;

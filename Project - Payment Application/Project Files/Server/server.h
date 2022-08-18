@@ -29,9 +29,9 @@ typedef enum EN_serverError_t
 
 typedef struct ST_accountsDB_t {
     uint16_t id;
-    char CardHolderName[25];
+    int8_t CardHolderName[25];
     uint8_t PAN[MAX_PAN_SIZE + 1];
-    char CardExpirationDate[6];
+    int8_t CardExpirationDate[6];
     float Balance;
     uint8_t isStolen;
 } ST_accountsDB_t;

@@ -1,10 +1,10 @@
-id, Card Holder Name, PAN, Card Expiration Date, Balance
+id, Card Holder Name, PAN, Card Expiration Date, Balance, isStolen
 0, Elsie-May Smith Allman, 6709157263619735, 08/26, 50699.000000, 0
 1, Eissa Martin Wormald, 6706337732930409, 06/25, 9592.000000, 0
 2, Milly Cyrus Gibbsons, 670995485543707426, 12/28, 89874.000000, 0
 3, Edward Harris Longou, 67716239517846141, 11/23, 4792.000000, 0
 4, Ireland Gimley Skywalker, 6304481020574952, 07/26, 85955.000000, 0
-5, Estebano Jorge Woody, 677107433663180024, 04/25, 72328.000000, 0
+5, Estebano Jorge Woody, 677107433663180024, 04/25, 72300.000000, 0
 6, Leah Anakin Jacobson, 6771774265286868, 09/27, 35382.000000, 0
 7, Tiara Samuel Danielle, 6304265239576218014, 08/26, 57146.000000, 0
 8, Anyana Martin Fisher, 67098106522151734, 04/29, 73265.000000, 0
@@ -16,7 +16,7 @@ id, Card Holder Name, PAN, Card Expiration Date, Balance
 14, Katie Bryant Oswaldo, 67095948047506949, 11/24, 51243.000000, 0
 15, Nathaniel Roux Smallings, 6709292472605629, 07/27, 48621.000000, 0
 16, Jaylen Neymar Augustus, 6709688048529005, 04/26, 77972.000000, 0
-17, Mohamed Salah Cooley, 6706635558482219, 09/28, 86019.000000, 0
+17, Mohamed Salah Cooley, 6706635558482219, 09/28, 86000.000000, 0
 18, Nathanael Drake Velez, 67096555614428370, 08/27, 48262.000000, 0
 19, Juliane Thomas Gates, 63048179815363852, 04/30, 46599.000000, 1
 20, Rene Weiler Lambings, 6771654209871225, 01/25, 4000.000000, 0
@@ -28,7 +28,7 @@ id, Card Holder Name, PAN, Card Expiration Date, Balance
 26, Kieran Gate Mann Drink, 677127444535685112, 11/24, 18000.000000, 0
 27, Jaliyah Lawd Hessangs, 630454394873403705, 07/27, 71200.000000, 0
 28, Brett Lloyd Schmidtt, 67097011467814760, 04/26, 42359.000000, 0
-29, Aracely Robin Hood Berry, 6771723153640090471, 09/28, 35945.000000, 0
+29, Aracely Robin Hood Berry, 6771723153640090471, 09/28, 35900.000000, 0
 30, Maddox Everett Gatsderry, 6304182307985024, 08/27, 23437.000000, 0
 31, Tyrone Okinshield Strick, 6706814056692192002, 04/30, 75919.000000, 0
 32, Yoselin Yaris Rosa Parks, 6771199012182943270, 01/25, 70000.000000, 0

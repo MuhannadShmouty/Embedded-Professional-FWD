@@ -9,7 +9,7 @@
 
 bool isNumber(uint8_t *string) {
     // Takes String and check if all it contains are numbers
-    for (int i = 0; string[i] != '\0'; i++)
+    for (int8_t i = 0; string[i] != '\0'; i++)
     {
         if (isdigit(string[i]) == 0)
               return 0;
@@ -21,16 +21,16 @@ bool isCorrectCardNumber(uint8_t *string) {
     /* Checks if the PAN is a Luhn number or not */
 
 
-    unsigned long long cc_number = 0;
+    uint64_t cc_number = 0;
 
-    int PAN_size = strlen(string);
+    int8_t PAN_size = strlen(string);
 
-    sscanf(string, "%llu", &cc_number);
-    int sum = 0;
-    int parity = (PAN_size - 2) % 2;
+    sscanf(string, "%llu", (unsigned long long*)&cc_number);
+    int8_t sum = 0;
+    int8_t parity = (PAN_size - 2) % 2;
 
     for (int i = 0; i < PAN_size; i++) {
-        int digit = cc_number % 10;
+        int8_t digit = cc_number % 10;
 
         if (i % 2 != 0)
             digit = digit * 2;
@@ -123,13 +123,13 @@ EN_cardError_t getCardPAN(ST_cardData_t *cardData) {
     
 }
 
-void printError(char *errorMessage) {
+void printError(int8_t *errorMessage) {
     printf(RED);
     printf("%s\n", errorMessage);
     printf(RESET);
 }
 
-void printSuccess(char *Message) {
+void printSuccess(int8_t *Message) {
     printf(GREEN);
     printf("%s\n", Message);
     printf(RESET);
