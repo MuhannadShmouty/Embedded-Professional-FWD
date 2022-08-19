@@ -23,7 +23,7 @@
 
 typedef enum EN_cardError_t
 {
-    OK, WRONG_NAME, WRONG_EXP_DATE, WRONG_PAN
+    CARD_OK, WRONG_NAME, WRONG_EXP_DATE, WRONG_PAN
 }EN_cardError_t;
 
 typedef struct ST_cardData_t
@@ -36,10 +36,12 @@ typedef struct ST_cardData_t
 EN_cardError_t getCardHolderName(ST_cardData_t *cardData);
 EN_cardError_t getCardExpiryDate(ST_cardData_t *cardData);
 EN_cardError_t getCardPAN(ST_cardData_t *cardData);
+
 void printError(int8_t *errorMessage);
 void printSuccess(int8_t *Message);
 
 bool isNumber(uint8_t *string);
 bool isCorrectCardNumber(uint8_t *string);
+bool isNotName (uint8_t *string);
 
 #endif

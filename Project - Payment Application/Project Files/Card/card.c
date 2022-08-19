@@ -27,7 +27,6 @@ bool isCorrectCardNumber(uint8_t *string) {
 
     sscanf(string, "%llu", (unsigned long long*)&cc_number);
     int8_t sum = 0;
-    int8_t parity = (PAN_size - 2) % 2;
 
     for (int i = 0; i < PAN_size; i++) {
         int8_t digit = cc_number % 10;
@@ -62,7 +61,7 @@ EN_cardError_t getCardHolderName(ST_cardData_t *cardData) {
     cardHolderName_len = strlen(buffer);
 
     if (cardHolderName_len > MAX_CARD_HOLDER_NAME_LEN ||
-        cardHolderName_len < MIN_CARD_HOLDER_NAME_LEN) 
+        cardHolderName_len < MIN_CARD_HOLDER_NAME_LEN || isNotName(buffer)) 
     {
         // Invalid Card Holder Name
         printError("Invalid Card Holder Name");
@@ -71,8 +70,19 @@ EN_cardError_t getCardHolderName(ST_cardData_t *cardData) {
     else {
         // Valid Card Holder Name
         strcpy (cardData->cardHolderName, buffer);
-        return OK;
+        return CARD_OK;
     }
+}
+
+bool isNotName (uint8_t *string) {
+    bool isName;
+    for (int8_t i = 0; string[i] == '\n'; i++) {
+        isName = (string[i] >= 'A' && string[i] <= 'Z') || (string[i] >= 'a' && string[i] <= 'z') || string[i] == ' ';
+        if (!(isName)){
+            return true;
+        }
+    }
+    return false;
 }
 
 EN_cardError_t getCardExpiryDate(ST_cardData_t *cardData) {
@@ -93,7 +103,7 @@ EN_cardError_t getCardExpiryDate(ST_cardData_t *cardData) {
         // Year is not older than the current year
         
         strcpy (cardData->cardExpirationDate, buffer);
-        return OK;
+        return CARD_OK;
     }else {
         printError("Invalid Expiry Date");
         return WRONG_EXP_DATE;
@@ -113,7 +123,7 @@ EN_cardError_t getCardPAN(ST_cardData_t *cardData) {
         // correct size
         // correct format
         strcpy (cardData->primaryAccountNumber, buffer);
-        return OK;
+        return CARD_OK;
     }else {
         printError("Invalid Primary Account Number");
         return WRONG_PAN;
