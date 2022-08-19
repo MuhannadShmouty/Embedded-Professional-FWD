@@ -12,33 +12,37 @@ bool isNumber(uint8_t *string) {
     for (int8_t i = 0; string[i] != '\0'; i++)
     {
         if (isdigit(string[i]) == 0)
-              return 0;
+              return false;
     }
-    return 1;
+    return true;
 }
 
 bool isCorrectCardNumber(uint8_t *string) {
     /* Checks if the PAN is a Luhn number or not */
 
-
-    uint64_t cc_number = 0;
+    uint64_t PAN = 0;
 
     int8_t PAN_size = strlen(string);
 
-    sscanf(string, "%llu", (unsigned long long*)&cc_number);
-    int8_t sum = 0;
+    sscanf(string, "%llu", (unsigned long long*)&PAN);
+    int8_t sum = 0, digit;
 
     for (int i = 0; i < PAN_size; i++) {
-        int8_t digit = cc_number % 10;
+        digit = PAN % 10;
 
+        // Check if it is the 0th, 2nd, 4th, ... digit [even position digit]
         if (i % 2 != 0)
             digit = digit * 2;
 
+        // Check if the product of multiplication is a two digit number
+        // add the digits individually
+        // 1X - 10 + 1 = 1X - 9     [1X : 10, 11, 12, ...]
+        
         if (digit > 9)
             digit = digit - 9;
 
         sum = sum + digit;
-        cc_number /= 10;
+        PAN /= 10;
     }
 
     return (sum % 10 == 0);
