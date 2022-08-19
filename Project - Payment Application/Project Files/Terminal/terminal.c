@@ -22,7 +22,7 @@ EN_terminalError_t getTransactionDate(ST_terminalData_t *termData) {
 
     // Create the date string in the fromat DD/MM/YYYY
     sprintf(termData->transactionDate, "%02d/%02d/%04d", dd, mm, yy);
-    return OK;
+    return TERMINAL_OK;
 }
 
 EN_terminalError_t isCardExpired(ST_cardData_t cardData) {
@@ -51,12 +51,12 @@ EN_terminalError_t isCardExpired(ST_cardData_t cardData) {
         {
             // Future year
             
-            return OK;
+            return TERMINAL_OK;
         }
         if (cardExpMonth > currentMonth)
         {
             // Future month
-            return OK;
+            return TERMINAL_OK;
         }
     }
     return EXPIRED_CARD;
@@ -78,7 +78,7 @@ EN_terminalError_t getTransactionAmount(ST_terminalData_t *termData) {
         return EXCEED_MAX_AMOUNT;
     }
     termData->transAmount = buffer;
-    return OK;
+    return TERMINAL_OK;
 }
 
 
@@ -86,7 +86,7 @@ EN_terminalError_t isBelowMaxAmount(ST_terminalData_t *termData) {
     if (termData->transAmount > termData->maxTransAmount) {
         return EXCEED_MAX_AMOUNT;
     }
-    return OK;
+    return TERMINAL_OK;
 }
 
 EN_terminalError_t setMaxAmount(ST_terminalData_t *termData) {
@@ -100,5 +100,5 @@ EN_terminalError_t setMaxAmount(ST_terminalData_t *termData) {
     }
 
     termData->maxTransAmount = buffer;
-    return OK;
+    return TERMINAL_OK;
 }
