@@ -10,8 +10,9 @@
 #include "../Server/server.h"
 #include "app.h"
 
-ST_accountsDB_t accountDB[ACC_DB_MAX_SIZE];
-ST_transaction_t transData;
+extern uint32_t user_id;
+extern ST_database_t accountDB[ACC_DB_MAX_SIZE];
+extern ST_transaction_t transData;
 
 void appStart(void) {
     // Load data from database (accountsDB.csv File)
@@ -19,31 +20,24 @@ void appStart(void) {
 
     // Set max transaction amount to default value
     transData.terminalData.maxTransAmount = DEFAULT_MAX_TRANSACTION;
-    // Check if max transaction value is needed to be changed
-    char response;
-    do {
-        printf("Set maximum transaction Amount? [Default 5000](y/n):");
-        scanf(" %c", &response);
-        if (!(response == 'y' || response == 'Y' || response == 'N' || response == 'n')) {
-            printError("Invalid Input\nExpected Input:[Y,y,N,n]");
-        }
-    } while(!(response == 'y' || response == 'Y' || response == 'N' || response == 'n'));
 
-    if (response == 'y' || response == 'Y'){
-        while(setMaxAmount(&(transData.terminalData)) != OK);
+    /***  Card Module  ***/
+    // Collect User Data
+    while(getCardHolderName(&(transData.cardHolderData)) != CARD_OK);
+    while(getCardPAN(&(transData.cardHolderData)) != CARD_OK);
+    while(getCardExpiryDate(&(transData.cardHolderData)) != CARD_OK);
+    
+    /***  Terminal Module  ***/
+    if (isCardExpired(transData.cardHolderData) == EXPIRED_CARD) {
+        printError("Expired Card");
+        exit(0);
     }
 
-    // Collect User Data
-    while(getCardHolderName(&(transData.cardHolderData)) != OK);
-    while(getCardPAN(&(transData.cardHolderData)) != OK);
-    while(getCardExpiryDate(&(transData.cardHolderData)) != OK);
-
-
-    EN_terminalError_t terminalError = getTransactionAmount(&(transData.terminalData));
-    
-
+    while(getTransactionAmount(&(transData.terminalData)) != TERMINAL_OK);
     getTransactionDate(&(transData.terminalData));
-    transData.transState = recieveTransactionData(&transData, accountDB);
+
+    /***  Server Module  ***/
+    transData.transState = recieveTransactionData(&transData);
 
     saveTransaction(&transData);
 
@@ -54,49 +48,5 @@ void appStart(void) {
 }
 
 int main () {
-    char program_token;
-
-    printf("Perform transaction (T) or get Transaction Data (D)?\n");
-    scanf(" %c", &program_token);
-
-    if (program_token == 'T' || program_token == 't') {
-        appStart();
-    }else if (program_token == 'D' || program_token == 'd') {
-        int num;
-        printf("Transaction Sequence Number:\n");
-        scanf("%d", &num);
-        if (getTransaction(num, &transData) == OK) {
-            char state[50];
-            switch (transData.transState) {
-                case APPROVED:
-                    strcpy(state, "APPROVED");
-                    break;
-                case DECLINED_INSUFFECIENT_FUND:
-                    strcpy(state, "DECLINED_INSUFFECIENT_FUND");
-                    break;
-                case DECLINED_STOLEN_CARD:
-                    strcpy(state, "DECLINED_STOLEN_CARD");
-                    break;
-                case EXCEEDED_MAX_AMOUNT:
-                    strcpy(state, "DECLINED_EXCEEDED_MAX_AMOUNT");
-                    break;
-                case DECLINED_EXPIRED_CARD:
-                    strcpy(state, "DECLINED_EXPIRED_CARD");
-                    break;
-                case INTERNAL_SERVER_ERROR:
-                    strcpy(state, "DECLINED_INTERNAL_SERVER_ERROR");
-                    break;
-            }
-            printf("Transaction Sequence Number: %d\n", transData.transactionSequenceNumber);
-            printf("User ID: %d\n", transData.user_id);
-            printf("Transaction Amount: %f\n", transData.terminalData.transAmount);
-            printf("TransactionDate: %s\n", transData.terminalData.transactionDate);
-            printf("Transaction State: %s\n", state);
-        }
-        else {
-            printError("Transaction Not Fount");
-        }
-    } else {
-        printError("Invalind Input");
-    }
+    appStart();
 }
