@@ -35,15 +35,18 @@ EN_transState_t recieveTransactionData(ST_transaction_t *transData) {
 
     if (!found){
         printError("Declined\nIncorrect Name");
+        user_id = ERROR_NUM;
         return FRAUD_CARD;
     }
 
     if (strcmp(accountDB[user_id].CardExpirationDate, transData->cardHolderData.cardExpirationDate) != 0) {
         printError("Declined\nIncorrect Expiration Date");
+        user_id = ERROR_NUM;
         return FRAUD_CARD;
     }
     if (!(isValidAccount(transData->cardHolderData, accountDB[user_id].accountData) == SERVER_OK)) {
         printError("Declined\nIncorrect PAN");
+        user_id = ERROR_NUM;
         return FRAUD_CARD;
     }
 
