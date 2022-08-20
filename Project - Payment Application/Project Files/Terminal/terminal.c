@@ -73,10 +73,6 @@ EN_terminalError_t getTransactionAmount(ST_terminalData_t *termData) {
         return INVALID_AMOUNT;
     }
 
-    if (buffer > termData->maxTransAmount) {
-        termData->transAmount = buffer;
-        return EXCEED_MAX_AMOUNT;
-    }
     termData->transAmount = buffer;
     return TERMINAL_OK;
 }

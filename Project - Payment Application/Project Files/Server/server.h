@@ -8,10 +8,11 @@
 #define SIZE_OF_STATE 50
 #define ERROR_NUM -1
 #define SIZE_OF_TITLE_LINE 94
+#define STATE_SIZE 8
 
 typedef enum EN_transState_t
 {
-    APPROVED, DECLINED_INSUFFECIENT_FUND, DECLINED_STOLEN_CARD, EXCEEDED_MAX_AMOUNT, DECLINED_EXPIRED_CARD, INTERNAL_SERVER_ERROR
+    APPROVED, DECLINED_INSUFFECIENT_FUND, DECLINED_STOLEN_CARD, FRAUD_CARD, INTERNAL_SERVER_ERROR
 }EN_transState_t;
 
 typedef struct ST_transaction_t
@@ -19,34 +20,46 @@ typedef struct ST_transaction_t
     ST_cardData_t cardHolderData;
     ST_terminalData_t terminalData;
     EN_transState_t transState;
-    int32_t user_id;
     uint32_t transactionSequenceNumber;
 }ST_transaction_t;
 
 typedef enum EN_serverError_t
 {
-    Alright, SAVING_FAILED, TRANSACTION_NOT_FOUND, ACCOUNT_NOT_FOUND, LOW_BALANCE, FILE_ERROR
+    SERVER_OK, SAVING_FAILED, TRANSACTION_NOT_FOUND, ACCOUNT_NOT_FOUND, LOW_BALANCE, BLOCKED_ACCOUNT
 }EN_serverError_t ;
 
 
+typedef enum EN_accountState_t
+{
+RUNNING,
+BLOCKED
+}EN_accountState_t;
+
 
 typedef struct ST_accountsDB_t {
-    uint16_t id;
-    int8_t CardHolderName[25];
-    uint8_t PAN[MAX_PAN_SIZE + 1];
-    int8_t CardExpirationDate[6];
-    float Balance;
-    uint8_t isStolen;
+    float balance;
+    EN_accountState_t state;
+    uint8_t primaryAccountNumber[20];
 } ST_accountsDB_t;
 
+typedef struct ST_database_t {
+    ST_accountsDB_t accountData;
+    int8_t CardHolderName[25];
+    int8_t CardExpirationDate[6];
+    uint16_t id;
+} ST_database_t;
 
-EN_transState_t recieveTransactionData(ST_transaction_t *transData, ST_accountsDB_t accountDB[]);
-EN_serverError_t isValidAccount(ST_transaction_t *transData, ST_accountsDB_t accountDB[]);
-// EN_serverError_t isAmountAvailable(float transAmount, float balance);
-int32_t getTransactionSequenceNumber();
+EN_transState_t recieveTransactionData(ST_transaction_t *transData);
+EN_serverError_t isValidAccount(ST_cardData_t cardData, ST_accountsDB_t accountRefrence);
+EN_serverError_t isBlockedAccount(ST_accountsDB_t *accountRefrence);
+EN_serverError_t isAmountAvailable(ST_terminalData_t *termData);
 EN_serverError_t saveTransaction(ST_transaction_t *transData);
 EN_serverError_t getTransaction(uint32_t transactionSequenceNumber, ST_transaction_t *transData);
-EN_serverError_t loadData(ST_accountsDB_t accountDB[]);
-EN_serverError_t saveAccountData(ST_accountsDB_t accountDB[]);
+
+
+int32_t getTransactionSequenceNumber();
+
+EN_serverError_t loadData();
+EN_serverError_t saveAccountData(ST_database_t accountDB[]);
 
 #endif

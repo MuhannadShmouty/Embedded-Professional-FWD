@@ -9,55 +9,86 @@
 #include "../Terminal/terminal.h"
 #include "server.h"
 
-EN_transState_t recieveTransactionData(ST_transaction_t *transData, ST_accountsDB_t accountDB[]) {
-    if (isValidAccount(transData, accountDB) == OK) {
-        if(isCardExpired(transData->cardHolderData) == EXPIRED_CARD) {
-            printError("Declined\nExpired Card");
-            return DECLINED_EXPIRED_CARD;
-        }
 
-        if(accountDB[transData->user_id].isStolen == true) {
-            printError("Declined\nStolen Card");
-            return DECLINED_STOLEN_CARD;
-        }
-        if(isBelowMaxAmount(&(transData->terminalData)) == EXCEED_MAX_AMOUNT) {
-            printError("Exceeded Maximum Transaction Amount");
-            return EXCEEDED_MAX_AMOUNT;
-        }
-        else if (transData->terminalData.transAmount > accountDB[transData->user_id].Balance) {
-            // Insufficient balance amount
-            printError("Declined\nInsufficient Funds");
-            
-            return DECLINED_INSUFFECIENT_FUND;
-        } 
+uint32_t user_id;
+ST_database_t accountDB[ACC_DB_MAX_SIZE];
+ST_transaction_t transData;
 
-        // Amount is available
-        // update the database with the new balance
-        accountDB[transData->user_id].Balance -= transData->terminalData.transAmount;
-        return APPROVED;
+
+EN_transState_t recieveTransactionData(ST_transaction_t *transData) {
+
+    // search through database using the name
+    // get the id of that name
+    // use isValidAccount(inputData, accountDB[id]) -->> to compare PAN
+    // id PANs don't match return FRAUD_CARD
+    bool found = false;
+
+    for (int16_t i = 0; i < ACC_DB_MAX_SIZE ; i++) {
+        if (found)
+            break;
+        if (strcmp(transData->cardHolderData.cardHolderName, accountDB[i].CardHolderName) == 0) {
+            // Account exists
+            user_id = i;
+            found = true;
+        }
     }
-    else {
-        printError("Declined\nStolen card");
-        transData->user_id = ERROR_NUM;
+
+    if (!found){
+        printError("Declined\nIncorrect Name");
+        return FRAUD_CARD;
+    }
+
+    if (strcmp(accountDB[user_id].CardExpirationDate, transData->cardHolderData.cardExpirationDate) != 0) {
+        printError("Declined\nIncorrect Expiration Date");
+        return FRAUD_CARD;
+    }
+    if (!(isValidAccount(transData->cardHolderData, accountDB[user_id].accountData) == SERVER_OK)) {
+        printError("Declined\nIncorrect PAN");
+        return FRAUD_CARD;
+    }
+
+    if (isBelowMaxAmount(&(transData->terminalData)) == EXCEED_MAX_AMOUNT) {
+        printError("Exceeded Max Amount");
+        return INTERNAL_SERVER_ERROR;
+    }
+
+    if(accountDB[user_id].accountData.state == BLOCKED) {
+        printError("Declined\nStolen Card");
         return DECLINED_STOLEN_CARD;
     }
+    
+    if (isAmountAvailable(&(transData->terminalData)) == LOW_BALANCE) {
+        // Insufficient balance amount
+        printError("Declined\nInsufficient Funds");
+        
+        return DECLINED_INSUFFECIENT_FUND;
+    }
+
+    // Amount is available
+    // update the database with the new balance
+    accountDB[user_id].accountData.balance -= transData->terminalData.transAmount;
+    printSuccess("Valid Account");
+    return APPROVED;
+
 }
 
-EN_serverError_t isValidAccount(ST_transaction_t *transData, ST_accountsDB_t accountDB[]) {
-    // check if account exists
-    // printf("db: %s\nentry: %s\n", accountDB[24].PAN, transData->cardHolderData.primaryAccountNumber);
-
-    for (int8_t i = 0; i < ACC_DB_MAX_SIZE ; i++) {
-        if (((strcmp(accountDB[i].PAN, transData->cardHolderData.primaryAccountNumber) == 0)) &&
-            ((strcmp(accountDB[i].CardHolderName, transData->cardHolderData.cardHolderName)) == 0) &&
-            ((strcmp(accountDB[i].CardExpirationDate, transData->cardHolderData.cardExpirationDate)) == 0)) {
-                // Account exists
-                transData->user_id = i;
-                return OK;
-            }
+EN_serverError_t isValidAccount(ST_cardData_t cardData, ST_accountsDB_t accountRefrence) {
+    // check if account PAN is correct with respect to database
+    
+    if (strcmp(accountRefrence.primaryAccountNumber, cardData.primaryAccountNumber) == 0) {
+            // Account exists
+            return SERVER_OK;
     }
+
     return ACCOUNT_NOT_FOUND; 
 }
+
+EN_serverError_t isAmountAvailable(ST_terminalData_t *termData) {
+    if(termData->transAmount > accountDB[user_id].accountData.balance)
+        return LOW_BALANCE;
+    return SERVER_OK;
+}
+
 
 
 int32_t getTransactionSequenceNumber() {
@@ -99,25 +130,22 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
     fseek(transFilePtr, 2, SEEK_CUR);
 
     // Writing transactionsDB.csv file
-    int8_t state[SIZE_OF_STATE];
+    int8_t transaction_state[SIZE_OF_STATE];
     switch (transData->transState) {
         case APPROVED:
-            strcpy(state, "APPROVED");
+            strcpy(transaction_state, "APPROVED");
             break;
         case DECLINED_INSUFFECIENT_FUND:
-            strcpy(state, "DECLINED_INSUFFECIENT_FUND");
+            strcpy(transaction_state, "DECLINED_INSUFFECIENT_FUND");
             break;
         case DECLINED_STOLEN_CARD:
-            strcpy(state, "DECLINED_STOLEN_CARD");
+            strcpy(transaction_state, "DECLINED_STOLEN_CARD");
             break;
-        case EXCEEDED_MAX_AMOUNT:
-            strcpy(state, "DECLINED_EXCEEDED_MAX_AMOUNT");
-            break;
-        case DECLINED_EXPIRED_CARD:
-            strcpy(state, "DECLINED_EXPIRED_CARD");
+        case FRAUD_CARD:
+            strcpy(transaction_state, "DECLINED_FRAUD_CARD");
             break;
         case INTERNAL_SERVER_ERROR:
-            strcpy(state, "DECLINED_INTERNAL_SERVER_ERROR");
+            strcpy(transaction_state, "DECLINED_INTERNAL_SERVER_ERROR");
             break;
     }
 
@@ -125,25 +153,34 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
     getTransactionDate(&(transData->terminalData));
 
     
-    fprintf(transFilePtr, "\n%d, %d, %f, %s, %s", getTransactionSequenceNumber(), transData->user_id,
-            transData->terminalData.transAmount, transData->terminalData.transactionDate, state);
+    fprintf(transFilePtr, "\n%d, %d, %f, %s, %s", getTransactionSequenceNumber(), user_id,
+            transData->terminalData.transAmount, transData->terminalData.transactionDate, transaction_state);
 
     fclose(transFilePtr);
 }
 
 
-EN_serverError_t loadData(ST_accountsDB_t accountDB[]) {
+EN_serverError_t loadData() {
     FILE *accountsDbPtr = fopen("../Server/accountsDB.csv", "r");
 
     int32_t index = 0;
     int8_t buffer[SIZE_OF_BUFFER];
+    int8_t state[STATE_SIZE];
 
     // To skip first line
     while (fgetc(accountsDbPtr) != '\n');
 
     while (fgets(buffer, 100, accountsDbPtr) != NULL) {
-        sscanf(buffer, "%hd, %[^,], %[^,], %[^,], %f, %hhd", &(accountDB[index].id), accountDB[index].CardHolderName,
-        accountDB[index].PAN, accountDB[index].CardExpirationDate, &(accountDB[index].Balance), &(accountDB[index].isStolen));
+        // printf("%s\n", buffer);
+        sscanf(buffer, "%hd, %[^,], %[^,], %[^,], %f, %[^\n]", &(accountDB[index].id), accountDB[index].CardHolderName,
+        accountDB[index].accountData.primaryAccountNumber, accountDB[index].CardExpirationDate, &(accountDB[index].accountData.balance),
+        (char *)&state);
+
+        if (strcmp(state, "RUNNING") == 0) {
+            accountDB[index].accountData.state = RUNNING;
+        } else {
+            accountDB[index].accountData.state = BLOCKED;
+        }
         index++;
 
         // clear buffer
@@ -152,7 +189,7 @@ EN_serverError_t loadData(ST_accountsDB_t accountDB[]) {
     fclose(accountsDbPtr);
 }
 
-EN_serverError_t saveAccountData(ST_accountsDB_t accountDB[]) {
+EN_serverError_t saveAccountData(ST_database_t accountDB[]) {
 
     FILE *accFilePtr;
     // Saving accountDB.csv file
@@ -160,15 +197,22 @@ EN_serverError_t saveAccountData(ST_accountsDB_t accountDB[]) {
     
     // To skip first line
     int8_t buffer[SIZE_OF_BUFFER];
-
-    fprintf(accFilePtr, "id, Card Holder Name, PAN, Card Expiration Date, Balance, isStolen\n");
+    int8_t state[STATE_SIZE];
+    fprintf(accFilePtr, "id, Card Holder Name, PAN, Card Expiration Date, Balance, Transaction State\n");
 
     for (int i = 0; i < ACC_DB_MAX_SIZE; i++) {
         if (accountDB[i].CardHolderName[0] == 0)
             break;
         
-        fprintf(accFilePtr, "%d, %s, %s, %s, %f, %d\n", accountDB[i].id, accountDB[i].CardHolderName,
-                accountDB[i].PAN, accountDB[i].CardExpirationDate, accountDB[i].Balance, accountDB[i].isStolen);
+        if (accountDB[i].accountData.state == RUNNING) {
+            strcpy(state, "RUNNING");
+        } else {
+            strcpy(state, "BLOCKED");
+        }
+        
+        fprintf(accFilePtr, "%d, %s, %s, %s, %f, %s\n", accountDB[i].id, accountDB[i].CardHolderName,
+                accountDB[i].accountData.primaryAccountNumber, accountDB[i].CardExpirationDate,
+                accountDB[i].accountData.balance, state);
     }
     fclose(accFilePtr);
 }
@@ -197,13 +241,12 @@ EN_serverError_t getTransaction(uint32_t transactionSequenceNumber, ST_transacti
 
     while (fgets(buffer, SIZE_OF_BUFFER, transFilePtr) != NULL) {
         sscanf(buffer, "%d, %s", &currentSequenceNumber, rest);
-
         if (currentSequenceNumber == transactionSequenceNumber) {
             sscanf(buffer, "%u, %d, %f, %[^,], %d", &transData->transactionSequenceNumber,
-                    &transData->user_id, &transData->terminalData.transAmount,
+                    &user_id, &transData->terminalData.transAmount,
                     transData->terminalData.transactionDate, (int *)&transData->transState);
             fclose(transFilePtr);
-            return OK;
+            return SERVER_OK;
         }
     }
     fclose(transFilePtr);
