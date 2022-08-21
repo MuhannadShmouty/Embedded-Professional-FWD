@@ -13,3 +13,6 @@
 ## Implement the card module
 ### Fill in card.h file with functions' prototypes and typedefs
 ![](Screenshots/7-CARD_Header_complete.png)
+### Implement getCardHolderName function
+https://user-images.githubusercontent.com/40808151/185782062-e10481df-2bdd-4c71-ba73-f7a5b5ab428e.mp4
+
