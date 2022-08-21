@@ -15,4 +15,5 @@
 ![](Screenshots/7-CARD_Header_complete.png)
 ### Implement getCardHolderName function
 https://user-images.githubusercontent.com/40808151/185782062-e10481df-2bdd-4c71-ba73-f7a5b5ab428e.mp4
-
+### Implement getCardExpiryDate function
+https://user-images.githubusercontent.com/40808151/185782973-d7aadb25-3a04-408f-9b73-4b428a0a329c.mp4
