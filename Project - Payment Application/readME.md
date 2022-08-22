@@ -7,7 +7,9 @@
   <summary>Development environment preparation</summary>
 
   ### Create modules folders
-  ![](Screenshots/1-folder_structure.png)
+  <p align="center">
+    ![](Screenshots/1-folder_structure.png)
+  </p>
   ### Create .c and .h file for each module
   ![](Screenshots/2-files_in_each_folder.png)
   ### Add header file gaurd
