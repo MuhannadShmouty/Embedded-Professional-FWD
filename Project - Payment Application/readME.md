@@ -1,5 +1,8 @@
 # Project 1 : Payment Application
 
+## Application Flowchart
+![](Screenshots/payment-flowchart.jpg)
+
 <details>
   <summary>Development environment preparation</summary>
 
