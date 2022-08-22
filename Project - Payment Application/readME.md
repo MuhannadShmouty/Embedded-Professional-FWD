@@ -53,11 +53,13 @@
   ### Fill in server.h file with functions' prototypes and typedefs
   ![](Screenshots/9-SERVER_Header_complete.png)
   ### Implement server-side accounts' database
-  #### A screenshot from the csv file created
+  #### A screenshot from the csv file created:
   ![](Screenshots/10-accountsDB.png)
   ### Implement server-side transactions' database
-  #### A screenshot from the csv file created with no transactions
+  #### A screenshot from the csv file created with no transactions:
   ![](Screenshots/11-transactionsDB.png)
+  #### A screenshot from the csv file created with some transactions:
+  ![](Screenshots/11a-transactionsDB.png)
 </details>
 
 
