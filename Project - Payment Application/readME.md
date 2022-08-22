@@ -1,6 +1,8 @@
 # Project 1 : Payment Application
 
-## Development environment preparation
+<details>
+  <summary>Development environment preparation</summary>
+
 ### Create modules folders
 ![](Screenshots/1-folder_structure.png)
 ### Create .c and .h file for each module
@@ -10,6 +12,7 @@
 ![](Screenshots/4-SERVER_Header_file_guard.png)
 ![](Screenshots/5-TERMINAL_Header_file_guard.png)
 ![](Screenshots/6-CARD_Header_file_guard.png)
+</details>
 
 <details>
   <summary>Card Module</summary>
