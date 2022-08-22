@@ -159,7 +159,7 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
     getTransactionDate(&(transData->terminalData));
 
     uint32_t transSeqNum = getTransactionSequenceNumber();    
-    fprintf(transFilePtr, "\n%d, %d, %f, %s, %s", getTransactionSequenceNumber(), user_id,
+    fprintf(transFilePtr, "\n%d, %d, %f, %s, %s", transSeqNum, user_id,
             transData->terminalData.transAmount, transData->terminalData.transactionDate, transaction_state);
 
     fclose(transFilePtr);
