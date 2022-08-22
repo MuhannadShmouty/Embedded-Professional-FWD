@@ -23,3 +23,5 @@ https://user-images.githubusercontent.com/40808151/185929444-4be836ba-7102-41c5-
 ## Implement the terminal module
 ### Fill in terminal.h file with functions' prototypes and typedefs
 ![](Screenshots/8-TERMINAL_Header_complete.png)
+### Implement getTransactionDate function
+https://user-images.githubusercontent.com/40808151/185932506-90804e4f-751b-46b5-8da9-002c34bc7a37.mp4
