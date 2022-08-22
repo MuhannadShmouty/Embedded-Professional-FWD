@@ -57,7 +57,7 @@
   ![](Screenshots/10-accountsDB.png)
   ### Implement server-side transactions' database
   #### A screenshot from the csv file created with no transactions
-  ![](Screenshots/11-11-transactionsDB.png)
+  ![](Screenshots/11-transactionsDB.png)
 </details>
 
 
