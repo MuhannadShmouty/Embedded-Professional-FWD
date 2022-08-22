@@ -19,3 +19,6 @@ https://user-images.githubusercontent.com/40808151/185782062-e10481df-2bdd-4c71-
 https://user-images.githubusercontent.com/40808151/185782973-d7aadb25-3a04-408f-9b73-4b428a0a329c.mp4
 ### Implement getCardPAN function
 https://user-images.githubusercontent.com/40808151/185929444-4be836ba-7102-41c5-b044-702885c65df6.mp4
+
+## Implement the terminal module
+### Fill in terminal.h file with functions' prototypes and typedefs
