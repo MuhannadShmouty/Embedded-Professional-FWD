@@ -14,7 +14,7 @@
   ![](Screenshots/6-CARD_Header_file_guard.png)
 </details>
 
-## Implement the card module
+## Implement the Card module
 <details>
   <summary>Card Module</summary>
 
@@ -28,7 +28,7 @@
   https://user-images.githubusercontent.com/40808151/185929444-4be836ba-7102-41c5-b044-702885c65df6.mp4
 </details>
 
-## Implement the terminal module
+## Implement the Terminal module
 <details>
   <summary>Terminal Module</summary>
   
@@ -46,11 +46,12 @@
   https://user-images.githubusercontent.com/40808151/185949845-2c364496-14e0-495c-ab0a-e9c459ea67a3.mp4
 </details>
 
-## Implement the server module
+## Implement the Server module
 <details>
   <summary>Server Module</summary>
   
   ### Fill in server.h file with functions' prototypes and typedefs
+  
 </details>
 
 
