@@ -28,4 +28,4 @@ https://user-images.githubusercontent.com/40808151/185932506-90804e4f-751b-46b5-
 ### Implement isCardExpried function
 https://user-images.githubusercontent.com/40808151/185942241-2f5ff175-72fa-4da5-b6d9-32215dbe7278.mp4
 ### Implement gatTransactionAmount function
-https://user-images.githubusercontent.com/40808151/185944447-2fe9224e-81e9-4961-8f97-a02521265ddd.mp4
+https://user-images.githubusercontent.com/40808151/185945385-32f9f740-ca64-49d7-a06e-2afa69b60ec4.mp4
