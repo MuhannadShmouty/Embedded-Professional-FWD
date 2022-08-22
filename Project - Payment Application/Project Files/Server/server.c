@@ -181,7 +181,6 @@ EN_serverError_t loadData() {
     while (fgetc(accountsDbPtr) != '\n');
 
     while (fgets(buffer, 100, accountsDbPtr) != NULL) {
-        // printf("%s\n", buffer);
         sscanf(buffer, "%hd, %[^,], %[^,], %[^,], %f, %[^\n]", &(accountDB[index].id), accountDB[index].CardHolderName,
         accountDB[index].accountData.primaryAccountNumber, accountDB[index].CardExpirationDate, &(accountDB[index].accountData.balance),
         (char *)&state);
