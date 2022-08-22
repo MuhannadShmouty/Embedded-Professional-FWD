@@ -51,7 +51,7 @@
   <summary>Server Module</summary>
   
   ### Fill in server.h file with functions' prototypes and typedefs
-  
+  ![](Screenshots/9-SERVER_Header_complete.png)
 </details>
 
 
