@@ -63,13 +63,12 @@ EN_terminalError_t isCardExpired(ST_cardData_t cardData) {
 }
 
 EN_terminalError_t getTransactionAmount(ST_terminalData_t *termData) {
-    float buffer;
+    float buffer = 0;
     printf("Transaction Amount: ");
     scanf("%f", &buffer);
 
     if (buffer <=0) {
         printError("Invalid Transaction Amount");
-        termData->transAmount = buffer;
         return INVALID_AMOUNT;
     }
 
