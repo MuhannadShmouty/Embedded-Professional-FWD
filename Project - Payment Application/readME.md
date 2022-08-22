@@ -53,6 +53,7 @@
   ### Fill in server.h file with functions' prototypes and typedefs
   ![](Screenshots/9-SERVER_Header_complete.png)
   ### Implement server-side accounts' database
+  ![](Screenshots/10-accountsDB.png)
 </details>
 
 
