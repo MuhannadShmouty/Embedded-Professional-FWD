@@ -15,7 +15,7 @@
 </details>
 
 <details>
-  <summary>Card Module</summary>
+  <summary>###Card Module</summary>
   
 ## Implement the card module
 ### Fill in card.h file with functions' prototypes and typedefs
