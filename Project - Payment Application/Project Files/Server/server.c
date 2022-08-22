@@ -16,36 +16,38 @@ ST_transaction_t transData;
 
 
 EN_transState_t recieveTransactionData(ST_transaction_t *transData) {
-
-    // search through database using the name
-    // get the id of that name
-    // use isValidAccount(inputData, accountDB[id]) -->> to compare PAN
+    
     // id PANs don't match return FRAUD_CARD
     bool found = false;
-
+    // search through database array using the name
     for (int16_t i = 0; i < ACC_DB_MAX_SIZE ; i++) {
         if (found)
             break;
         if (strcmp(transData->cardHolderData.cardHolderName, accountDB[i].CardHolderName) == 0) {
             // Account exists
+            // get the id of that name
             user_id = i;
             found = true;
         }
     }
 
     if (!found){
+        // Entry name is not found in database array
         printError("Declined\nIncorrect Name");
         user_id = ERROR_NUM;
         return FRAUD_CARD;
     }
 
-    if (strcmp(accountDB[user_id].CardExpirationDate, transData->cardHolderData.cardExpirationDate) != 0) {
-        printError("Declined\nIncorrect Expiration Date");
+    if (isValidAccount(transData->cardHolderData, accountDB[user_id].accountData) == ACCOUNT_NOT_FOUND) {
+        // entry PAN not found in database array
+        printError("Declined\nIncorrect PAN");
         user_id = ERROR_NUM;
         return FRAUD_CARD;
     }
-    if (!(isValidAccount(transData->cardHolderData, accountDB[user_id].accountData) == SERVER_OK)) {
-        printError("Declined\nIncorrect PAN");
+
+    if (strcmp(accountDB[user_id].CardExpirationDate, transData->cardHolderData.cardExpirationDate) != 0) {
+        // entry expiration date does not match card expiration date in database array
+        printError("Declined\nIncorrect Expiration Date");
         user_id = ERROR_NUM;
         return FRAUD_CARD;
     }
@@ -56,6 +58,7 @@ EN_transState_t recieveTransactionData(ST_transaction_t *transData) {
     }
 
     if(accountDB[user_id].accountData.state == BLOCKED) {
+        // Account exists in database array, but it is blocked
         printError("Declined\nStolen Card");
         return DECLINED_STOLEN_CARD;
     }
@@ -68,7 +71,7 @@ EN_transState_t recieveTransactionData(ST_transaction_t *transData) {
     }
 
     // Amount is available
-    // update the database with the new balance
+    // update the database array with the new balance
     accountDB[user_id].accountData.balance -= transData->terminalData.transAmount;
     printSuccess("Valid Account");
     return APPROVED;
@@ -155,11 +158,15 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
     
     getTransactionDate(&(transData->terminalData));
 
-    
+    uint32_t transSeqNum = getTransactionSequenceNumber();    
     fprintf(transFilePtr, "\n%d, %d, %f, %s, %s", getTransactionSequenceNumber(), user_id,
             transData->terminalData.transAmount, transData->terminalData.transactionDate, transaction_state);
 
     fclose(transFilePtr);
+
+    if(getTransaction(transSeqNum, transData) == TRANSACTION_NOT_FOUND){
+        return SAVING_FAILED;
+    }
 }
 
 
