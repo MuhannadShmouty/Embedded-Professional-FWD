@@ -71,6 +71,8 @@
   https://user-images.githubusercontent.com/40808151/186135803-612d0cf6-66d5-4dbe-a847-bb71d8ac74b3.mp4
   ### Implement saveTransaction function
   https://user-images.githubusercontent.com/40808151/186137600-97f70805-3c13-4474-950b-2b5288aa8ce3.mp4
+  ### Implement getTransaction function
+  https://user-images.githubusercontent.com/40808151/186138988-582f8555-a1e4-4cfe-acf8-9fb70c0b1e9b.mp4
 </details>
 
 
