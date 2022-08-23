@@ -93,6 +93,14 @@
 </details>
 
 
+## Testing the application
+<details>
+  <summary>Testing</summary>
+  
+  ### Transaction approved user story
+  https://user-images.githubusercontent.com/40808151/186152543-690af6fb-e427-486a-abe7-d07baa2319ee.mp4
+  
+</details>
 
 
 
