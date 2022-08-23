@@ -65,6 +65,8 @@
   ![](Screenshots/11a-transactionsDB.png)
   ### Implement recieveTransactionData function
   https://user-images.githubusercontent.com/40808151/186133362-61421325-cf1c-4933-9c7d-3836d66e14e3.mp4
+  ### Implement isValidAccount function
+  https://user-images.githubusercontent.com/40808151/186134659-7f9b0aa8-91ae-4dc4-9840-166ce9a73f8a.mp4
 </details>
 
 
