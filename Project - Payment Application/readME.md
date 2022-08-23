@@ -83,7 +83,7 @@
 </details>
 
 ## Implement the application
-<detalis>
+<details>
   <summary>Application</summary>
   
   ### Fill in application.h file with functions' prototypes
