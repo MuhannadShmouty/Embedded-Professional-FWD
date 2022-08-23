@@ -87,7 +87,7 @@
   <summary>Application</summary>
   
   ### Fill in application.h file with functions' prototypes
-  ![](Screenshot/12-APP_Header.png)
+  ![](Screenshots/12-APP_Header.png)
 </details>
 
 
