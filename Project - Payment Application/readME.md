@@ -82,6 +82,13 @@
   https://user-images.githubusercontent.com/40808151/186143033-d8476546-6ec7-47f8-8d4f-b693ca218bae.mp4
 </details>
 
+## Implement the application
+<detalis>
+  <summary>Application</summary>
+  
+  ### Fill in application.h file with functions' prototypes
+  ![](Screenshot/12-APP_Header.png)
+</details>
 
 
 
