@@ -76,6 +76,8 @@
   ## Utility functions:
   ### Implement loadData function
   https://user-images.githubusercontent.com/40808151/186140964-49be9abe-7015-449e-a719-29a499a8126a.mp4
+  ### Implement getTransactionSequenceNumber function
+  https://user-images.githubusercontent.com/40808151/186142128-c84017b6-dae2-46e9-a79d-1536aa6f87b2.mp4
 </details>
 
 
