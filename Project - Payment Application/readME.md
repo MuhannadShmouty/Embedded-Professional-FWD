@@ -88,6 +88,8 @@
   
   ### Fill in application.h file with functions' prototypes
   ![](Screenshots/12-APP_Header.png)
+  ### Implement appStart function
+  https://user-images.githubusercontent.com/40808151/186147966-c26d6eb0-d7f8-4406-8f4e-a419504c36f7.mp4
 </details>
 
 
