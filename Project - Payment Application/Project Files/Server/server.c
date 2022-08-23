@@ -167,6 +167,7 @@ EN_serverError_t saveTransaction(ST_transaction_t *transData) {
     if(getTransaction(transSeqNum, transData) == TRANSACTION_NOT_FOUND){
         return SAVING_FAILED;
     }
+    return SERVER_OK;
 }
 
 
