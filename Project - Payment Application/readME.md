@@ -67,6 +67,8 @@
   https://user-images.githubusercontent.com/40808151/186133362-61421325-cf1c-4933-9c7d-3836d66e14e3.mp4
   ### Implement isValidAccount function
   https://user-images.githubusercontent.com/40808151/186134659-7f9b0aa8-91ae-4dc4-9840-166ce9a73f8a.mp4
+  ### Implement isAmountAvailable function
+  https://user-images.githubusercontent.com/40808151/186135803-612d0cf6-66d5-4dbe-a847-bb71d8ac74b3.mp4
 </details>
 
 
