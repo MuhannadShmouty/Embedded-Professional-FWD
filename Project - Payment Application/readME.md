@@ -101,6 +101,8 @@
   https://user-images.githubusercontent.com/40808151/186152543-690af6fb-e427-486a-abe7-d07baa2319ee.mp4
   ### Exceed the maximum amount user story
   https://user-images.githubusercontent.com/40808151/186154914-7df3e6de-6d2c-45f7-91db-211481e48bbf.mp4
+  ### Insufficient fund user story
+  https://user-images.githubusercontent.com/40808151/186156712-903cc713-5b7c-4318-a5ac-c87ebeeb6cee.mp4
 </details>
 
 
