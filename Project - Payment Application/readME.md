@@ -73,6 +73,9 @@
   https://user-images.githubusercontent.com/40808151/186137600-97f70805-3c13-4474-950b-2b5288aa8ce3.mp4
   ### Implement getTransaction function
   https://user-images.githubusercontent.com/40808151/186138988-582f8555-a1e4-4cfe-acf8-9fb70c0b1e9b.mp4
+  ## Utility functions:
+  ### Implement loadData function
+  https://user-images.githubusercontent.com/40808151/186140964-49be9abe-7015-449e-a719-29a499a8126a.mp4
 </details>
 
 
