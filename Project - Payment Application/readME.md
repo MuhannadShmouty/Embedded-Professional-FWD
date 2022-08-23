@@ -29,6 +29,9 @@
   https://user-images.githubusercontent.com/40808151/185782973-d7aadb25-3a04-408f-9b73-4b428a0a329c.mp4
   ### Implement getCardPAN function
   https://user-images.githubusercontent.com/40808151/185929444-4be836ba-7102-41c5-b044-702885c65df6.mp4
+  
+
+
 </details>
 
 ## Implement the Terminal module
@@ -103,6 +106,8 @@
   https://user-images.githubusercontent.com/40808151/186154914-7df3e6de-6d2c-45f7-91db-211481e48bbf.mp4
   ### Insufficient fund user story
   https://user-images.githubusercontent.com/40808151/186156712-903cc713-5b7c-4318-a5ac-c87ebeeb6cee.mp4
+  ### Expired card user story
+  https://user-images.githubusercontent.com/40808151/186157946-2dfa2594-9c37-4f1d-9de6-6bd90acf6a33.mp4
 </details>
 
 
