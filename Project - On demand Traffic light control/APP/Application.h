@@ -10,16 +10,28 @@
 #define APPLICATION_H_
 
 #define F_CPU 1000000UL
+#include <stdbool.h>
+#include "../ECUAL/LED_Driver/LED_Driver.h"
+#include "../ECUAL/Button_Driver/Button_Driver.h"
+#include "../MCAL/TMIER_DRIVER/TIMER_DRIVER.h"
+#include "../MCAL/INTERRUPT_Driver/Interrupt.h"
 
-#include <util/delay.h>
-
-void appInit(void);
-void appLoop(void);
+#define Prescaler					64
+#define CARS_RED_LED				PIN_00
+#define CARS_YELLOW_LED				PIN_01
+#define CARS_GREEN_LED				PIN_02
+#define PEDESTRIANS_RED_LED			PIN_00
+#define PEDESTRIANS_YELLOW_LED		PIN_01
+#define PEDESTRIANS_GREEN_LED		PIN_02
+#define BUTTON						PIN_02
+#define SHORT_PRESS_TIME			2
 
 typedef enum {APP_NORMAL_START, APP_NORMAL_MODE, APP_PEDESTRIAN_START, APP_PEDESTRIAN_MODE} APP_MODE;
 typedef enum {GREEN, YELLOW, RED} CARS_LEDs_STATE;
 
+	
+void appInit(void);
+void appLoop(void);
 void Turn_Off_All_LEDS(void);
-
 
 #endif /* APPLICATION_H_ */

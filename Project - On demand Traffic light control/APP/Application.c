@@ -4,27 +4,14 @@
  * Created: 27/8/2022 7:06:08 PM
  * Author : Muhannad Shmouty
  */ 
-#include <stdbool.h>
 
-#include "../ECUAL/LED_Driver/LED_Driver.h"
-#include "../ECUAL/Button_Driver/Button_Driver.h"
-#include "../MCAL/TMIER_DRIVER/TIMER_DRIVER.h"
+
+
+
 #include "Application.h"
-#include "../MCAL/INTERRUPT_Driver/Interrupt.h"
-
-#include <util/delay.h>
 
 
-#define Prescaler					64
-#define CARS_RED_LED				PIN_00
-#define CARS_YELLOW_LED				PIN_01
-#define CARS_GREEN_LED				PIN_02
-#define PEDESTRIANS_RED_LED			PIN_00
-#define PEDESTRIANS_YELLOW_LED		PIN_01
-#define PEDESTRIANS_GREEN_LED		PIN_02
-
-
-volatile uint8_t time_s = 0;
+volatile uint8_t time_s = 0, EXTI_0_time_s = 0;
 volatile APP_MODE state = APP_NORMAL_START;
 volatile CARS_LEDs_STATE carsLED = GREEN;
 volatile uint8_t fullCycleTime = 20;
@@ -40,7 +27,7 @@ void appInit(void)
 	LED_init(DIO_PORTB, PEDESTRIANS_YELLOW_LED);
 	LED_init(DIO_PORTB, PEDESTRIANS_GREEN_LED);
 	// Enable external interrupt on pin 2 in PORTD (INT_0)
-	EXTI_Enable(INT_0, RISING);
+	EXTI_Enable(INT_0, PIN_CHANGE);
 	// Enable timer1 on CTC mode with Prescaler of 64
 	timer1Enable(CTC, Prescaler);
 	
@@ -63,7 +50,7 @@ void appLoop(void) {
 			 */
 			
 			// Enable external Interrupt
-			EXTI_Enable(INT_0, RISING);
+			EXTI_Enable(INT_0, PIN_CHANGE);
 			
 			// Initialize time
 			time_s = 0;
@@ -266,10 +253,23 @@ void appLoop(void) {
 
 ISR(TMR1_INT_CMPA) {
 	time_s = ((time_s + 1) % fullCycleTime);
+	EXTI_0_time_s++;
 }
 
 ISR(EXT_INT_0) {
-	state = APP_PEDESTRIAN_START;
+	// Pin is high, Rising edge
+	if (ReadPinValue(DIO_PORTD, BUTTON) == HIGH) {
+		// reset counting time
+		EXTI_0_time_s = 0;
+	}
+	
+	// Pin is low, Falling edge
+	if (ReadPinValue(DIO_PORTD, BUTTON) == LOW) {
+		// Only allow to switch to Pedestrian mode on short presses
+		if (EXTI_0_time_s < SHORT_PRESS_TIME){
+			state = APP_PEDESTRIAN_START;
+		}
+	}
 }
 
 void Turn_Off_All_LEDS() {
