@@ -28,10 +28,10 @@
 
 typedef enum {APP_NORMAL_START, APP_NORMAL_MODE, APP_PEDESTRIAN_START, APP_PEDESTRIAN_MODE} APP_MODE;
 typedef enum {GREEN, YELLOW, RED} CARS_LEDs_STATE;
-
+typedef enum {APP_OK, APP_ERROR}APP_ERROR_t;
 	
-void appInit(void);
-void appLoop(void);
+APP_ERROR_t appInit(void);
+APP_ERROR_t appLoop(void);
 void Turn_Off_All_LEDS(void);
 
 #endif /* APPLICATION_H_ */

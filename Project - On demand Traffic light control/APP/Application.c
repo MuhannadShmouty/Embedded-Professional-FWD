@@ -5,9 +5,6 @@
  * Author : Muhannad Shmouty
  */ 
 
-
-
-
 #include "Application.h"
 
 
@@ -17,7 +14,7 @@ volatile CARS_LEDs_STATE carsLED = GREEN;
 volatile uint8_t fullCycleTime = 20;
 bool isFinished = false;
 
-void appInit(void)
+APP_ERROR_t appInit(void)
 {
 	LED_init(DIO_PORTA, CARS_RED_LED);
 	LED_init(DIO_PORTA, CARS_YELLOW_LED);
@@ -38,9 +35,10 @@ void appInit(void)
 	GIE_Enable();
 	// Enable Interrupt for Timer 1
 	Time1_InterruptEnable();
+	return APP_OK;
 }
 
-void appLoop(void) {
+APP_ERROR_t appLoop(void) {
 	// Generate state machine scheme
 	switch (state){
 		
@@ -69,7 +67,7 @@ void appLoop(void) {
 			
 			// Set the full cycle time
 			fullCycleTime = 20;
-		
+			LED_ON(DIO_PORTB, PEDESTRIANS_RED_LED);
 			
 			if (time_s < 5) {
 				// Do this while in the range of the First 5 seconds
@@ -247,8 +245,12 @@ void appLoop(void) {
 				// Proceed to start the normal mode
 				state = APP_NORMAL_START;
 			}
-			break;
+		break;
+		default:
+		return APP_ERROR;
+		break;
 	}
+	return APP_OK;
 }
 
 ISR(TMR1_INT_CMPA) {
